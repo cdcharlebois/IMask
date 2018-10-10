@@ -18,6 +18,7 @@ export default defineWidget('IMask', template, {
     _contextObj: null,
     // modeler
     attribute: null,
+    placeholderText: null,
     // nodes
     labelNode: null,
     inputNode: null,
@@ -35,7 +36,7 @@ export default defineWidget('IMask', template, {
         if (obj) {
             this._contextObj = obj;
         }
-        this.inputNode.placeholder = "A1A 1A1" // todo
+        this.inputNode.placeholder = this.placeholderText;
         this._setupMask();
         if (callback && "function" == typeof callback) {
             callback();

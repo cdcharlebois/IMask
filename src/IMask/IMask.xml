@@ -1,6 +1,6 @@
 <widget id="IMask.widget.IMask" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
     <name>IMask</name>
-    <description>Dummy widget</description>
+    <description>The missing custom input mask for Mendix</description>
     <icon/>
     <properties>
         <property key="attribute" type="attribute" required="true">
@@ -10,6 +10,14 @@
           <attributeTypes>
             <attributeType name="String" />
           </attributeTypes>
+        </property>
+        <property key="placeholderText" type="translatableString" required="false">
+          <caption>Placeholder</caption>
+          <category>Appearance</category>
+          <description>The help text to display in the input box before the user types anything.</description>
+          <translations>
+            <translation lang="en_US"></translation>
+          </translations>
         </property>
     </properties>
 </widget>
