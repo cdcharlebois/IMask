@@ -1,0 +1,15 @@
+<widget id="IMask.widget.IMask" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>IMask</name>
+    <description>Dummy widget</description>
+    <icon/>
+    <properties>
+        <property key="attribute" type="attribute" required="true">
+          <caption>Attribute</caption>
+          <category>General</category>
+          <description></description>
+          <attributeTypes>
+            <attributeType name="String" />
+          </attributeTypes>
+        </property>
+    </properties>
+</widget>
