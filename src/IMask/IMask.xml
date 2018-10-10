@@ -19,5 +19,28 @@
             <translation lang="en_US"></translation>
           </translations>
         </property>
+
+        <property key="maskString" type="string" required="true">
+          <caption>Mask</caption>
+          <category>Behavior</category>
+          <description>Defaults are '0', 'a', and '*'</description>
+        </property>
+        <property key="customMaskDefs" type="object" isList="true" required="false">
+          <caption>Custom Mask Chars</caption>
+          <category>Behavior</category>
+          <description>Optional. Use to set your own mask definitions</description>
+          <properties>
+            <property key="char" type="string" required="true">
+              <caption>Character</caption>
+              <category>General</category>
+              <description></description>
+            </property>
+            <property key="def" type="string" required="true">
+              <caption>Definition</caption>
+              <category>General</category>
+              <description>Should be a javascript RegEx</description>
+            </property>
+          </properties>
+        </property>
     </properties>
 </widget>

@@ -1,7 +1,7 @@
 /**
- * @todo placeholder text
- * @todo character definitions
- * @todo mask
+ * @todo placeholder text - DONE
+ * @todo mask - DONE
+ * @todo character definitions - DONE
  * @todo onAccept
  * @todo onComplete
  */
@@ -19,6 +19,8 @@ export default defineWidget('IMask', template, {
     // modeler
     attribute: null,
     placeholderText: null,
+    maskString: null,
+    customMaskDefs: null, // {char, def}
     // nodes
     labelNode: null,
     inputNode: null,
@@ -45,13 +47,7 @@ export default defineWidget('IMask', template, {
 
     _setupMask() {
         var node = this.inputNode;
-        var maskOptions = {
-            mask: 'z0y 0y0', // todo
-            definitions: {
-                'y': /([wertypasghjklzxcvbnmWERTYPASGHJKLZXCVBNM])/, // todo
-                'z': /([ertypasghjklxcvbnmERTYPASGHJKLXCVBNM])/
-            }
-        }
+        var maskOptions = this._getMaskOptions();
         this.Mask = new IMask(node, maskOptions);
         this.Mask.on("accept", function () {
             console.log("accept"); // todo
@@ -63,6 +59,19 @@ export default defineWidget('IMask', template, {
             this._contextObj.set(this.attribute, this.Mask.unmaskedValue)
         }.bind(this))
         this._resetSubscriptions();
+    },
+
+    _getMaskOptions() {
+        var maskOptions = {};
+        maskOptions.mask = this.maskString;
+        // custom definitions
+        var customDefs = {};
+        for (var i = 0; i < this.customMaskDefs.length; i++) {
+            // {char: 'y', def: '[abc]'}
+            customDefs[this.customMaskDefs[i].char] = new RegExp(this.customMaskDefs[i].def);
+        }
+        maskOptions.definitions = customDefs;
+        return maskOptions;
     },
 
     _resetSubscriptions() {
