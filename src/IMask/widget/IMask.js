@@ -23,9 +23,13 @@ export default defineWidget('IMask', template, {
     onAcceptNanoflow: null,
     onCompleteNanoflow: null,
     onCompleteMicroflow: null,
+    horizontal: null,
+    hLabelWidth: null,
     // nodes
     labelNode: null,
     inputNode: null,
+    inputWrapperNode: null,
+    errorNode: null,
 
     constructor() {
         this.log = log.bind(this);
@@ -36,6 +40,10 @@ export default defineWidget('IMask', template, {
         log.call(this, 'postCreate', this._WIDGET_VERSION);
         if (this.label) {
             this.labelNode.innerText = this.label;
+            if (this.horizontal && this.hLabelWidth > 0 && this.hLabelWidth <= 12) {
+                this.labelNode.classList.add("col-md-" + this.hLabelWidth);
+                this.inputWrapperNode.classList.add("col-md-" + (12 - this.hLabelWidth));
+            }
         } else {
             this.labelNode.style.display = "none";
         }
@@ -46,6 +54,7 @@ export default defineWidget('IMask', template, {
         if (obj) {
             this._contextObj = obj;
         }
+        this.errorNode.classList.add("hidden");
         this.inputNode.placeholder = this.placeholderText;
         if (!this._isSetup) {
             this._setupMask();
@@ -138,8 +147,38 @@ export default defineWidget('IMask', template, {
             callback: function (guid, attr, attrValue) {
                 this.Mask.unmaskedValue = this._contextObj.get(this.attribute);
                 this.Mask.updateValue();
+                this._hideError();
             }.bind(this)
         });
+        this.subscribe({
+            guid: this._contextObj.getGuid(),
+            val: true,
+            callback: function (validations) {
+                var val;
+                for (var i = 0; i < validations.length; i++) {
+                    if (validations[0].getGuid() === this._contextObj.getGuid()) {
+                        val = validations[0];
+                        break;
+                    }
+                }
+                var errorMsg = val.getReasonByAttribute(this.attribute);
+                if (errorMsg) {
+                    this._showError(errorMsg)
+                }
+            }.bind(this)
+        });
+    },
+
+    _showError(msg) {
+        this.domNode.classList.add("has-error");
+        this.errorNode.innerText = msg;
+        this.errorNode.classList.remove("hidden");
+    },
+
+    _hideError() {
+        this.domNode.classList.remove("has-error");
+        this.errorNode.innerText = "";
+        this.errorNode.classList.add("hidden");
     },
 
     _doesNanoflowExist(nanoflow) {

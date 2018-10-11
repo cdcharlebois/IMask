@@ -27,6 +27,16 @@
             <translation lang="en_US"></translation>
           </translations>
         </property>
+        <property key="horizontal" type="boolean" defaultValue="false">
+          <caption>Render Horizonally</caption>
+          <category>Appearance</category>
+          <description>Be careful to match this with your data view's form orientation</description>
+        </property>
+        <property key="hLabelWidth" type="integer" defaultValue="3" required="true">
+         <caption>Label Width</caption>
+          <category>Appearance</category>
+          <description>If the input renders horizontally, how many columns should the label occupy?</description>
+        </property>
 
         <property key="maskString" type="string" required="true">
           <caption>Mask</caption>
