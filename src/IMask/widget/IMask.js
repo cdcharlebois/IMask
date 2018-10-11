@@ -131,10 +131,9 @@ export default defineWidget('IMask', template, {
         maskOptions.mask = this.maskString;
         // custom definitions
         var customDefs = {};
-        for (var i = 0; i < this.customMaskDefs.length; i++) {
-            // {char: 'y', def: '[abc]'}
-            customDefs[this.customMaskDefs[i].char] = new RegExp(this.customMaskDefs[i].def);
-        }
+        this.customMaskDefs.forEach(function (mapping) {
+            customDefs[mapping.char] = new RegExp(mapping.def)
+        }.bind(this))
         maskOptions.definitions = customDefs;
         return maskOptions;
     },
@@ -154,17 +153,20 @@ export default defineWidget('IMask', template, {
             guid: this._contextObj.getGuid(),
             val: true,
             callback: function (validations) {
-                var val;
-                for (var i = 0; i < validations.length; i++) {
-                    if (validations[0].getGuid() === this._contextObj.getGuid()) {
-                        val = validations[0];
-                        break;
-                    }
-                }
+                var val = validations.find(function (v) {
+                    return v.getGuid() === this._contextObj.getGuid();
+                }.bind(this))
+                // for (var i = 0; i < validations.length; i++) {
+                //     if (validations[0].getGuid() === this._contextObj.getGuid()) {
+                //         val = validations[0];
+                //         break;
+                //     }
+                // }
                 var errorMsg = val.getReasonByAttribute(this.attribute);
                 if (errorMsg) {
                     this._showError(errorMsg)
                 }
+                val.removeAttribute(this.attribute);
             }.bind(this)
         });
     },
