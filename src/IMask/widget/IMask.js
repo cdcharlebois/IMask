@@ -13,7 +13,9 @@ import template from './IMask.template.html'
 export default defineWidget('IMask', template, {
 
     _contextObj: null,
+    _isSetup: null,
     // modeler
+    label: null,
     attribute: null,
     placeholderText: null,
     maskString: null,
@@ -32,6 +34,12 @@ export default defineWidget('IMask', template, {
 
     postCreate() {
         log.call(this, 'postCreate', this._WIDGET_VERSION);
+        if (this.label) {
+            this.labelNode.innerText = this.label;
+        } else {
+            this.labelNode.style.display = "none";
+        }
+        this._isSetup = false;
     },
 
     update(obj, callback) {
@@ -39,7 +47,9 @@ export default defineWidget('IMask', template, {
             this._contextObj = obj;
         }
         this.inputNode.placeholder = this.placeholderText;
-        this._setupMask();
+        if (!this._isSetup) {
+            this._setupMask();
+        }
         if (callback && "function" == typeof callback) {
             callback();
         }
@@ -51,6 +61,7 @@ export default defineWidget('IMask', template, {
         this.Mask = new IMask(node, maskOptions);
         this.Mask.on("accept", this._onAccept.bind(this));
         this.Mask.on("complete", this._onComplete.bind(this));
+        this._isSetup = true;
         this._resetSubscriptions();
     },
 
@@ -125,7 +136,8 @@ export default defineWidget('IMask', template, {
             guid: this._contextObj.getGuid(),
             attr: this.attribute,
             callback: function (guid, attr, attrValue) {
-                this.Mask.value = this._contextObj.get(this.attribute);
+                this.Mask.unmaskedValue = this._contextObj.get(this.attribute);
+                this.Mask.updateValue();
             }.bind(this)
         });
     },

@@ -19,6 +19,14 @@
             <translation lang="en_US"></translation>
           </translations>
         </property>
+        <property key="label" type="translatableString" required="false">
+          <caption>Label</caption>
+          <category>Appearance</category>
+          <description></description>
+          <translations>
+            <translation lang="en_US"></translation>
+          </translations>
+        </property>
 
         <property key="maskString" type="string" required="true">
           <caption>Mask</caption>
@@ -42,6 +50,7 @@
             </property>
           </properties>
         </property>
+
         <property key="onAcceptNanoflow" type="nanoflow" required="false">
          <caption>On Accept</caption>
          <category>Events</category>
@@ -56,7 +65,7 @@
         </property>
         <property key="onCompleteMicroflow" type="microflow" required="false">
           <caption>On Complete MF</caption>
-          <category>Behavior</category>
+          <category>Events</category>
           <description>Triggered when the pattern is completely filled (Ignored if nanoflow is set)</description>
           <returnType type="Void" />
         </property>
