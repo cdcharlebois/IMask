@@ -1,9 +1,6 @@
 /**
- * @todo placeholder text - DONE
- * @todo mask - DONE
- * @todo character definitions - DONE
- * @todo onAccept
- * @todo onComplete
+ * @author Conner Charlebois (Mendix)
+ * @since Oct 10, 2018
  */
 import {
     defineWidget,
@@ -21,6 +18,9 @@ export default defineWidget('IMask', template, {
     placeholderText: null,
     maskString: null,
     customMaskDefs: null, // {char, def}
+    onAcceptNanoflow: null,
+    onCompleteNanoflow: null,
+    onCompleteMicroflow: null,
     // nodes
     labelNode: null,
     inputNode: null,
@@ -49,16 +49,61 @@ export default defineWidget('IMask', template, {
         var node = this.inputNode;
         var maskOptions = this._getMaskOptions();
         this.Mask = new IMask(node, maskOptions);
-        this.Mask.on("accept", function () {
-            console.log("accept"); // todo
-            this._contextObj.set(this.attribute, this.Mask.unmaskedValue)
-        }.bind(this))
-        this.Mask.on("complete", function () {
-            console.log("complete"); // todo
-            this.Mask.value = this.Mask.value.toUpperCase()
-            this._contextObj.set(this.attribute, this.Mask.unmaskedValue)
-        }.bind(this))
+        this.Mask.on("accept", this._onAccept.bind(this));
+        this.Mask.on("complete", this._onComplete.bind(this));
         this._resetSubscriptions();
+    },
+
+    _onAccept() {
+        console.debug("IMask onaccept")
+        this._contextObj.set(this.attribute, this.Mask.unmaskedValue);
+        if (this._doesNanoflowExist(this.onAcceptNanoflow)) {
+            mx.data.callNanoflow({
+                nanoflow: this.onAcceptNanoflow,
+                origin: this.mxform,
+                context: this.mxcontext,
+                callback: function (result) {
+                    console.debug("nanoflow ok")
+                },
+                error: function (error) {
+                    console.error(error)
+                }
+            });
+        }
+    },
+
+    _onComplete() {
+        console.debug("IMask oncomplete");
+        this._contextObj.set(this.attribute, this.Mask.unmaskedValue);
+        if (this._doesNanoflowExist(this.onCompleteNanoflow)) {
+            mx.data.callNanoflow({
+                nanoflow: this.onCompleteNanoflow,
+                origin: this.mxform,
+                context: this.mxcontext,
+                callback: function (result) {
+                    console.debug("nanoflow ok")
+                },
+                error: function (error) {
+                    console.error(error)
+                }
+            });
+        } else if (this.onCompleteMicroflow) {
+            mx.data.action({
+                params: {
+                    applyto: "selection",
+                    actionname: this.onCompleteMicroflow,
+                    guids: [this._contextObj.getGuid()]
+                },
+                origin: this.mxform,
+                callback: function (obj) {
+                    // expect single MxObject
+                    console.debug("microflow ok")
+                },
+                error: function (error) {
+                    console.error(error)
+                }
+            });
+        }
     },
 
     _getMaskOptions() {
@@ -83,6 +128,10 @@ export default defineWidget('IMask', template, {
                 this.Mask.value = this._contextObj.get(this.attribute);
             }.bind(this)
         });
+    },
+
+    _doesNanoflowExist(nanoflow) {
+        return Object.keys(nanoflow).length > 0;
     },
 
     uninitialize() {

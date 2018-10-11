@@ -42,5 +42,23 @@
             </property>
           </properties>
         </property>
+        <property key="onAcceptNanoflow" type="nanoflow" required="false">
+         <caption>On Accept</caption>
+         <category>Events</category>
+         <description>Triggered when the value of the input changes. (Each time the mask "accepts" a character)</description>
+         <returnType type="Void" />
+        </property>
+        <property key="onCompleteNanoflow" type="nanoflow" required="false">
+         <caption>On Complete</caption>
+         <category>Events</category>
+         <description>Triggered when the pattern is completely filled</description>
+         <returnType type="Void" />
+        </property>
+        <property key="onCompleteMicroflow" type="microflow" required="false">
+          <caption>On Complete MF</caption>
+          <category>Behavior</category>
+          <description>Triggered when the pattern is completely filled (Ignored if nanoflow is set)</description>
+          <returnType type="Void" />
+        </property>
     </properties>
 </widget>
