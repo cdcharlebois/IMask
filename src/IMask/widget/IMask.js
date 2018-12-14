@@ -20,6 +20,7 @@ export default defineWidget('IMask', template, {
     placeholderText: null,
     maskString: null,
     customMaskDefs: null, // {char, def}
+    // customMaskBlocks: null, // {block, def}
     onAcceptNanoflow: null,
     onCompleteNanoflow: null,
     onCompleteMicroflow: null,
@@ -59,6 +60,8 @@ export default defineWidget('IMask', template, {
         if (!this._isSetup) {
             this._setupMask();
         }
+        this.Mask.unmaskedValue = this._contextObj.get(this.attribute);
+        this.Mask.updateValue();
         if (callback && "function" == typeof callback) {
             callback();
         }
@@ -133,7 +136,14 @@ export default defineWidget('IMask', template, {
         var customDefs = {};
         this.customMaskDefs.forEach(function (mapping) {
             customDefs[mapping.char] = new RegExp(mapping.def)
-        }.bind(this))
+        }.bind(this));
+        // var customBlocks = {};
+        // this.customMaskBlocks.forEach(function (block) {
+        //     customBlocks[block.block] = {
+        //         mask: new RegExp(block.def)
+        //     }
+        // }.bind(this));
+        // maskOptions.blocks = customBlocks;
         maskOptions.definitions = customDefs;
         return maskOptions;
     },
@@ -184,7 +194,7 @@ export default defineWidget('IMask', template, {
     },
 
     _doesNanoflowExist(nanoflow) {
-        return Object.keys(nanoflow).length > 0;
+        return Object.keys(nanoflow) && Object.keys(nanoflow).length > 0;
     },
 
     uninitialize() {

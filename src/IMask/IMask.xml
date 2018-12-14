@@ -56,10 +56,27 @@
             <property key="def" type="string" required="true">
               <caption>Definition</caption>
               <category>General</category>
-              <description>Should be a javascript RegEx</description>
+              <description>Should be a javascript RegEx for a single character</description>
             </property>
           </properties>
         </property>
+        <!-- <property key="customMaskBlocks" type="object" isList="true" required="false">
+          <caption>Custom Mask Blocks</caption>
+          <category>Behavior</category>
+          <description>Optional. Similar to 'Chars' except these "blocks" can match more than one character. Use for more complex regex.</description>
+          <properties>
+            <property key="block" type="string" required="false">
+              <caption>Block</caption>
+              <category>General</category>
+              <description></description>
+            </property>
+            <property key="def" type="string" required="false">
+              <caption>Definition</caption>
+              <category>General</category>
+              <description>Should be a javascript RegEx for one or more characters</description>
+            </property>
+          </properties>
+        </property> -->
 
         <property key="onAcceptNanoflow" type="nanoflow" required="false">
          <caption>On Accept</caption>
