@@ -26,6 +26,7 @@ export default defineWidget('IMask', template, {
     onCompleteMicroflow: null,
     horizontal: null,
     hLabelWidth: null,
+    readOnly: null,
     // nodes
     labelNode: null,
     inputNode: null,
@@ -49,6 +50,9 @@ export default defineWidget('IMask', template, {
             this.labelNode.style.display = "none";
         }
         this._isSetup = false;
+        if (this.readOnly) {
+            this.inputNode.setAttribute("disabled", true);
+        }
     },
 
     update(obj, callback) {
