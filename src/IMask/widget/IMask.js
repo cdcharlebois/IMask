@@ -54,7 +54,7 @@ export default defineWidget('IMask', template, {
         if (this.readOnly) {
             this.inputNode.setAttribute("disabled", true);
         }
-        aspect.before(mx.session, "hasSomeRole", this._hideError.bind(this));
+        this._aspectHandle = aspect.before(mx.session, "hasSomeRole", this._hideError.bind(this));
     },
 
     update(obj, callback) {
@@ -205,5 +205,6 @@ export default defineWidget('IMask', template, {
 
     uninitialize() {
         this.Mask.destroy();
+        this._aspectHandle.remove();
     }
 });
