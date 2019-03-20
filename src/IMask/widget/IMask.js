@@ -8,7 +8,8 @@ import {
     runCallback,
 } from 'widget-base-helpers';
 import IMask from 'imask';
-import template from './IMask.template.html'
+import template from './IMask.template.html';
+import aspect from 'dojo/aspect';
 
 export default defineWidget('IMask', template, {
 
@@ -53,6 +54,7 @@ export default defineWidget('IMask', template, {
         if (this.readOnly) {
             this.inputNode.setAttribute("disabled", true);
         }
+        aspect.before(mx.session, "hasSomeRole", this._hideError.bind(this));
     },
 
     update(obj, callback) {
@@ -177,7 +179,7 @@ export default defineWidget('IMask', template, {
                 //     }
                 // }
                 var errorMsg = val.getReasonByAttribute(this.attribute);
-                if (errorMsg) {
+                if ("string" === typeof errorMsg) {
                     this._showError(errorMsg)
                 }
                 val.removeAttribute(this.attribute);
