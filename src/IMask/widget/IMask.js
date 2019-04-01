@@ -8,7 +8,8 @@ import {
     runCallback,
 } from 'widget-base-helpers';
 import IMask from 'imask';
-import template from './IMask.template.html'
+import template from './IMask.template.html';
+import aspect from 'dojo/aspect';
 
 export default defineWidget('IMask', template, {
 
@@ -26,6 +27,7 @@ export default defineWidget('IMask', template, {
     onCompleteMicroflow: null,
     horizontal: null,
     hLabelWidth: null,
+    readOnly: null,
     // nodes
     labelNode: null,
     inputNode: null,
@@ -49,6 +51,9 @@ export default defineWidget('IMask', template, {
             this.labelNode.style.display = "none";
         }
         this._isSetup = false;
+        if (this.readOnly) {
+            this.inputNode.setAttribute("disabled", true);
+        }
     },
 
     update(obj, callback) {
@@ -173,7 +178,7 @@ export default defineWidget('IMask', template, {
                 //     }
                 // }
                 var errorMsg = val.getReasonByAttribute(this.attribute);
-                if (errorMsg) {
+                if ("string" === typeof errorMsg) {
                     this._showError(errorMsg)
                 }
                 val.removeAttribute(this.attribute);
@@ -199,5 +204,18 @@ export default defineWidget('IMask', template, {
 
     uninitialize() {
         this.Mask.destroy();
+        this._aspectHandle.remove();
+    },
+
+    /**
+     * This is called when a form is validated against the form validation in the modeler. 
+     * Since this is a custom widget, it's never invalid.
+     * ---
+     * @author Conner Charlebois
+     * @since Mar 29, 2019
+     */
+    isValid() {
+        this._hideError();
+        return true;
     }
 });
