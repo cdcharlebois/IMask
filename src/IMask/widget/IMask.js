@@ -54,7 +54,6 @@ export default defineWidget('IMask', template, {
         if (this.readOnly) {
             this.inputNode.setAttribute("disabled", true);
         }
-        this._aspectHandle = aspect.before(mx.session, "hasSomeRole", this._hideError.bind(this));
     },
 
     update(obj, callback) {
@@ -206,5 +205,17 @@ export default defineWidget('IMask', template, {
     uninitialize() {
         this.Mask.destroy();
         this._aspectHandle.remove();
+    },
+
+    /**
+     * This is called when a form is validated against the form validation in the modeler. 
+     * Since this is a custom widget, it's never invalid.
+     * ---
+     * @author Conner Charlebois
+     * @since Mar 29, 2019
+     */
+    isValid() {
+        this._hideError();
+        return true;
     }
 });
