@@ -204,7 +204,6 @@ export default defineWidget('IMask', template, {
 
     uninitialize() {
         this.Mask.destroy();
-        this._aspectHandle.remove();
     },
 
     /**
