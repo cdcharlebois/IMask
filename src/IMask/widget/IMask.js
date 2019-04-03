@@ -60,7 +60,7 @@ export default defineWidget('IMask', template, {
         if (obj) {
             this._contextObj = obj;
         }
-        this.errorNode.classList.add("hidden");
+        this._hideError();
         this.inputNode.placeholder = this.placeholderText;
         if (!this._isSetup) {
             this._setupMask();
